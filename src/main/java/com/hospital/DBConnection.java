@@ -9,9 +9,9 @@ public class DBConnection {
 
     private static final String USER = "postgres";
     private static final String PASSWORD = "12345";
-    // * password of postgres
-
+ 
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 }
+ 
