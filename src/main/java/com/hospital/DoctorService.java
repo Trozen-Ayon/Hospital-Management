@@ -1,6 +1,5 @@
 package com.hospital;
 
-// * classes
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,6 +7,7 @@ import java.sql.Statement;
 import java.util.Scanner;
 
 public class DoctorService {
+
     public void viewDoctor() throws Exception{
 
         Connection connection=DBConnection.getConnection();
@@ -26,6 +26,8 @@ public class DoctorService {
     }
 
 
+
+
     public void registerDoctor(Scanner input) throws Exception {
 
     System.out.println("\nDoctor Registration");
@@ -35,6 +37,7 @@ public class DoctorService {
 
     System.out.print("Enter password: ");
     String password = input.nextLine();
+    String hashedPassword = PasswordUtil.hashPassword(password);
 
     System.out.print("Enter doctor name: ");
     String name = input.nextLine();
@@ -58,7 +61,7 @@ public class DoctorService {
         PreparedStatement ps1 = connection.prepareStatement(sql1);
 
         ps1.setString(1, username);
-        ps1.setString(2, password);
+        ps1.setString(2, hashedPassword);
 
         ResultSet rs = ps1.executeQuery();
 
@@ -129,23 +132,28 @@ public class DoctorService {
 
     Connection connection = DBConnection.getConnection();
 
-    String sql = "SELECT doctors.id FROM users " +
-                 "JOIN doctors ON users.id = doctors.user_id " +
-                 "WHERE users.username = ? AND users.password = ? " +
-                 "AND users.role = 'DOCTOR'";
+    String sql = "SELECT doctors.id, users.password FROM users " +
+             "JOIN doctors ON users.id = doctors.user_id " +
+             "WHERE users.username = ? " +
+             "AND users.role = 'DOCTOR'";
 
     PreparedStatement ps = connection.prepareStatement(sql);
 
     ps.setString(1, username);
-    ps.setString(2, password);
+    
 
     ResultSet rs = ps.executeQuery();
 
     int doctorId = -1;
 
     if (rs.next()) {
+
+    String storedHash = rs.getString("password");
+
+    if (PasswordUtil.checkPassword(password, storedHash)) {
         doctorId = rs.getInt("id");
     }
+}
 
     rs.close();
     ps.close();
@@ -153,6 +161,7 @@ public class DoctorService {
 
     return doctorId;
 }
+
 
 
 
@@ -203,6 +212,8 @@ public void viewMyAppointments(int doctorId) throws Exception {
     ps.close();
     connection.close();
 }
+
+
 
 public void acceptAppointment(int doctorId, Scanner input) throws Exception {
 

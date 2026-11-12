@@ -15,7 +15,11 @@ public class PatientService{
         String username=input.nextLine();
 
         System.out.println("Enter password : ");
+
+
         String password=input.nextLine();
+        String hashedPassword = PasswordUtil.hashPassword(password);
+        // * password hassing
 
         System.out.println("Enter Full name : ");
         String name=input.nextLine();
@@ -43,7 +47,8 @@ public class PatientService{
         PreparedStatement ps1=connection.prepareStatement(sql1);
 
         ps1.setString(1, username);
-        ps1.setString(2, password);
+        ps1.setString(2,hashedPassword);
+        // * hashed password
         
         ResultSet rs=ps1.executeQuery();
         rs.next();
@@ -81,23 +86,28 @@ public int loginPatient(String username, String password) throws Exception {
 
     Connection connection = DBConnection.getConnection();
 
-    String sql = "SELECT patients.id FROM users " +
-                 "JOIN patients ON users.id = patients.user_id " +
-                 "WHERE users.username = ? AND users.password = ? " +
-                 "AND users.role = 'PATIENT'";
+    String sql = "SELECT patients.id, users.password FROM users " +
+             "JOIN patients ON users.id = patients.user_id " +
+             "WHERE users.username = ? " +
+             "AND users.role = 'PATIENT'";             
 
     PreparedStatement ps = connection.prepareStatement(sql);
 
     ps.setString(1, username);
-    ps.setString(2, password);
+    
 
     ResultSet rs = ps.executeQuery();
 
     int patientId = -1;
 
-    if (rs.next()) {
+if (rs.next()) {
+
+    String storedHash = rs.getString("password");
+
+    if (PasswordUtil.checkPassword(password, storedHash)) {
         patientId = rs.getInt("id");
     }
+}
 
     rs.close();
     ps.close();
@@ -106,11 +116,14 @@ public int loginPatient(String username, String password) throws Exception {
     return patientId;
 }
 
+
+
+
 public void bookAppointment(int patientId, Scanner input) throws Exception {
 
     Connection connection = DBConnection.getConnection();
 
-    // Show all available doctors
+
     String sql1 = "SELECT id, name, specialization FROM doctors";
 
     PreparedStatement ps1 = connection.prepareStatement(sql1);
@@ -130,7 +143,7 @@ public void bookAppointment(int patientId, Scanner input) throws Exception {
     rs.close();
     ps1.close();
 
-    // Take appointment information
+    
     System.out.print("Enter Doctor ID: ");
     int doctorId = input.nextInt();
     input.nextLine();
@@ -144,7 +157,7 @@ public void bookAppointment(int patientId, Scanner input) throws Exception {
     System.out.print("Enter Reason: ");
     String reason = input.nextLine();
 
-    // Insert appointment into database
+
     String sql2 = "INSERT INTO appointments " +
                   "(patient_id, doctor_id, appointment_date, appointment_time, reason, status) " +
                   "VALUES (?, ?, ?, ?, ?, 'PENDING')";
@@ -165,6 +178,8 @@ public void bookAppointment(int patientId, Scanner input) throws Exception {
     ps2.close();
     connection.close();
 }
+
+
 
 
 public void viewMyAppointments(int patientId) throws Exception {
@@ -249,6 +264,9 @@ public void cancelAppointment(int patientId, Scanner input) throws Exception {
     connection.close();
 }
 
+
+
+
 public void viewPrescriptions(int patientId) throws Exception {
 
     Connection connection = DBConnection.getConnection();
@@ -297,6 +315,9 @@ public void viewPrescriptions(int patientId) throws Exception {
     ps.close();
     connection.close();
 }
+
+
+
 
 public void giveReview(int patientId, Scanner input) throws Exception {
 

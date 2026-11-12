@@ -6,27 +6,36 @@ import java.sql.ResultSet;
 
 public class AdminService {
 
-    public boolean loginAdmin(String username, String password) throws Exception {
+public boolean loginAdmin(String username, String password) throws Exception {
 
-        Connection connection = DBConnection.getConnection();
+    Connection connection = DBConnection.getConnection();
 
-        String sql = "SELECT id FROM users " +
-                     "WHERE username = ? AND password = ? " +
-                     "AND role = 'ADMIN'";
+    String sql = "SELECT id, password FROM users " +
+                 "WHERE username = ? " +
+                 "AND role = 'ADMIN'";
 
-        PreparedStatement ps = connection.prepareStatement(sql);
+    PreparedStatement ps = connection.prepareStatement(sql);
 
-        ps.setString(1, username);
-        ps.setString(2, password);
+    ps.setString(1, username);
 
-        ResultSet rs = ps.executeQuery();
+    ResultSet rs = ps.executeQuery();
 
-        boolean loginSuccess = rs.next();
+    boolean loginSuccess = false;
 
-        rs.close();
-        ps.close();
-        connection.close();
+    if (rs.next()) {
+        String storedHash = rs.getString("password");
 
-        return loginSuccess;
+        if (PasswordUtil.checkPassword(password, storedHash)) {
+            loginSuccess = true;
+        }
     }
+
+    rs.close();
+    ps.close();
+    connection.close();
+
+    return loginSuccess;
+}
+
+
 }

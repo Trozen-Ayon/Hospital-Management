@@ -1,5 +1,6 @@
 com\hospital\AdminService.class
 com\hospital\PatientService.class
 com\hospital\DoctorService.class
+com\hospital\PasswordUtil.class
 com\hospital\Main.class
 com\hospital\DBConnection.class
