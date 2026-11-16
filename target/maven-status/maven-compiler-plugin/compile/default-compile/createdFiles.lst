@@ -1,4 +1,5 @@
 com\hospital\AdminService.class
+com\hospital\CreateAdmin.class
 com\hospital\PatientService.class
 com\hospital\DoctorService.class
 com\hospital\PasswordUtil.class

@@ -8,23 +8,110 @@ import java.util.Scanner;
 
 public class DoctorService {
 
-    public void viewDoctor() throws Exception{
+public void viewDoctor() throws Exception {
 
-        Connection connection=DBConnection.getConnection();
-        Statement statement=connection.createStatement();
+    Connection connection = DBConnection.getConnection();
 
-        ResultSet result=statement.executeQuery("SELECT doctors.name, doctors.email,doctors.phone,doctors.specialization,departments.name AS department FROM doctors LEFT JOIN departments ON doctors.department_id=departments.id");
-        while(result.next()){
-            System.out.println("<----------->");
-            System.out.println("Name : "+result.getString("name"));
-            System.out.println("Email : "+result.getString("email"));
-            System.out.println("Phone : "+result.getString("phone"));
-            System.out.println("Specialization: "+result.getString("specialization"));
-            System.out.println("Department : "+result.getString("department"));
-        }
-        connection.close();
+    Statement statement = connection.createStatement();
+
+    ResultSet result = statement.executeQuery(
+        "SELECT doctors.id, doctors.name, doctors.email, " +
+        "doctors.phone, doctors.specialization, " +
+        "departments.name AS department " +
+        "FROM doctors " +
+        "LEFT JOIN departments " +
+        "ON doctors.department_id = departments.id"
+    );
+
+    while (result.next()) {
+
+        System.out.println("<----------->");
+
+        System.out.println("Doctor ID : " + result.getInt("id"));
+        System.out.println("Name : " + result.getString("name"));
+        System.out.println("Email : " + result.getString("email"));
+        System.out.println("Phone : " + result.getString("phone"));
+        System.out.println("Specialization: " + result.getString("specialization"));
+        System.out.println("Department : " + result.getString("department"));
     }
 
+    result.close();
+    statement.close();
+    connection.close();
+}
+
+
+
+public void updateDoctor(Scanner input) throws Exception {
+
+    System.out.print("Enter Doctor ID: ");
+    int doctorId = input.nextInt();
+    input.nextLine();
+
+    System.out.print("Enter new name: ");
+    String name = input.nextLine();
+
+    System.out.print("Enter new email: ");
+    String email = input.nextLine();
+
+    System.out.print("Enter new phone: ");
+    String phone = input.nextLine();
+
+    System.out.print("Enter new specialization: ");
+    String specialization = input.nextLine();
+
+    Connection connection = DBConnection.getConnection();
+
+    String sql = "UPDATE doctors SET name = ?, email = ?, " +
+                 "phone = ?, specialization = ? WHERE id = ?";
+
+    PreparedStatement ps = connection.prepareStatement(sql);
+
+    ps.setString(1, name);
+    ps.setString(2, email);
+    ps.setString(3, phone);
+    ps.setString(4, specialization);
+    ps.setInt(5, doctorId);
+
+    int rows = ps.executeUpdate();
+
+    if (rows > 0) {
+        System.out.println("Doctor Updated Successfully!");
+    } else {
+        System.out.println("Doctor ID Not Found!");
+    }
+
+    ps.close();
+    connection.close();
+}
+
+
+
+public void deleteDoctor(Scanner input) throws Exception {
+
+    System.out.print("Enter Doctor ID to delete: ");
+    int doctorId = input.nextInt();
+    input.nextLine();
+
+    Connection connection = DBConnection.getConnection();
+
+    String sql = "DELETE FROM doctors WHERE id = ?";
+
+    PreparedStatement ps = connection.prepareStatement(sql);
+
+    ps.setInt(1, doctorId);
+
+    int rows = ps.executeUpdate();
+
+    if (rows > 0) {
+        System.out.println("Doctor Deleted Successfully!");
+    } else {
+        System.out.println("Doctor ID Not Found!");
+    }
+
+    ps.close();
+    connection.close();
+}
 
 
 

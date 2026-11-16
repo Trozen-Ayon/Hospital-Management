@@ -369,4 +369,36 @@ public void giveReview(int patientId, Scanner input) throws Exception {
     connection.close();
 }
 
+
+public void viewAllPatients() throws Exception {
+
+    Connection connection = DBConnection.getConnection();
+
+    String sql = "SELECT id, name, email, phone, " +
+                 "date_of_birth, gender, address FROM patients";
+
+    PreparedStatement ps = connection.prepareStatement(sql);
+
+    ResultSet rs = ps.executeQuery();
+
+    while (rs.next()) {
+
+        System.out.println("<----------->");
+
+        System.out.println("Patient ID: " + rs.getInt("id"));
+        System.out.println("Name: " + rs.getString("name"));
+        System.out.println("Email: " + rs.getString("email"));
+        System.out.println("Phone: " + rs.getString("phone"));
+        System.out.println("Date of Birth: " + rs.getDate("date_of_birth"));
+        System.out.println("Gender: " + rs.getString("gender"));
+        System.out.println("Address: " + rs.getString("address"));
+    }
+
+    rs.close();
+    ps.close();
+    connection.close();
+}
+
+
+
 }

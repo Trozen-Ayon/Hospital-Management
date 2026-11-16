@@ -220,15 +220,92 @@ public  class Main{
             input.nextLine();
 
             if (adminChoice == 1) {
-                System.out.println("Manage Doctors Selected");
+                System.out.println("\nManage Doctors");
+    System.out.println("1. Add Doctor");
+    System.out.println("2. View All Doctors");
+    System.out.println("3. Update Doctor");
+    System.out.println("4. Delete Doctor");
+    System.out.println("5. Back");
+
+    System.out.print("Enter your choice: ");
+    int doctorChoice = input.nextInt();
+    input.nextLine();
+
+    DoctorService doctorService = new DoctorService();
+
+    if (doctorChoice == 1) {
+        doctorService.registerDoctor(input);
+    }
+    else if (doctorChoice == 2) {
+        doctorService.viewDoctor();
+    }
+    else if (doctorChoice == 3) {
+        doctorService.updateDoctor(input);
+    }
+    else if (doctorChoice == 4) {
+        doctorService.deleteDoctor(input);
+    }
+    else {
+        System.out.println("Invalid Choice!");
+    }
             } else if (adminChoice == 2) {
-                System.out.println("Manage Patients Selected");
+                System.out.println("\nManage Patients");
+    System.out.println("1. View All Patients");
+    System.out.println("2. Back");
+
+    System.out.print("Enter your choice: ");
+    int patientChoice = input.nextInt();
+    input.nextLine();
+
+    PatientService patientService = new PatientService();
+
+    if (patientChoice == 1) {
+        patientService.viewAllPatients();
+    }
+    else if (patientChoice == 2) {
+        System.out.println("Returning to Admin Dashboard...");
+    }
+    else {
+        System.out.println("Invalid Choice!");
+    }
             } else if (adminChoice == 3) {
-                System.out.println("Manage Departments Selected");
+                 System.out.println("\nManage Departments");
+    System.out.println("1. Add Department");
+    System.out.println("2. View All Departments");
+    System.out.println("3. Back");
+
+    System.out.print("Enter your choice: ");
+    int departmentChoice = input.nextInt();
+    input.nextLine();
+
+    DepartmentService departmentService = new DepartmentService();
+
+    if (departmentChoice == 1) {
+        departmentService.addDepartment(input);
+    }
+    else if (departmentChoice == 2) {
+        departmentService.viewAllDepartments();
+    }
+    else if (departmentChoice == 3) {
+        System.out.println("Returning to Admin Dashboard...");
+    }
+    else {
+        System.out.println("Invalid Choice!");
+    }
             } else if (adminChoice == 4) {
-                System.out.println("View All Appointments Selected");
+                
+            System.out.println("\nAll Appointments");
+            AppointmentService appointmentService = new AppointmentService();
+            appointmentService.viewAllAppointments();
+
+
             } else if (adminChoice == 5) {
-                System.out.println("Manage Reviews Selected");
+                    System.out.println("\nManage Reviews");
+
+                ReviewService reviewService = new ReviewService();
+
+                reviewService.viewAllReviews();
+                
             } else if (adminChoice == 6) {
                 System.out.println("Logout Successful!");
             } else {
