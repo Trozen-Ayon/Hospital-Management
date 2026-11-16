@@ -1,7 +1,10 @@
 com\hospital\AdminService.class
+com\hospital\AppointmentService.class
 com\hospital\CreateAdmin.class
 com\hospital\PatientService.class
+com\hospital\DepartmentService.class
 com\hospital\DoctorService.class
 com\hospital\PasswordUtil.class
+com\hospital\ReviewService.class
 com\hospital\Main.class
 com\hospital\DBConnection.class

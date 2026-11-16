@@ -14,10 +14,7 @@ public class PatientService{
         System.out.println("Enter username : ");
         String username=input.nextLine();
 
-        System.out.println("Enter password : ");
-
-
-        String password=input.nextLine();
+        String password = Main.readPassword("Enter Password: ");
         String hashedPassword = PasswordUtil.hashPassword(password);
         // * password hassing
 

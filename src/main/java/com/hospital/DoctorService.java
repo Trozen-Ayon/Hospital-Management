@@ -1,5 +1,6 @@
 package com.hospital;
 
+import java.io.Console;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -122,8 +123,7 @@ public void deleteDoctor(Scanner input) throws Exception {
     System.out.print("Enter username: ");
     String username = input.nextLine();
 
-    System.out.print("Enter password: ");
-    String password = input.nextLine();
+    String password = readPassword("Enter Password: ");
     String hashedPassword = PasswordUtil.hashPassword(password);
 
     System.out.print("Enter doctor name: ");
@@ -489,5 +489,16 @@ public void viewMyReviews(int doctorId) throws Exception {
     connection.close();
 }
 
+
+public static String readPassword(String message) {
+    Console console = System.console();
+
+    if (console == null) {
+        System.out.println("Run the program in VS Code Terminal.");
+        return "";
+    }
+
+    return new String(console.readPassword(message));
+}
 
 }
