@@ -367,6 +367,8 @@ public void giveReview(int patientId, Scanner input) throws Exception {
 }
 
 
+
+
 public void viewAllPatients() throws Exception {
 
     Connection connection = DBConnection.getConnection();

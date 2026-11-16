@@ -1,7 +1,7 @@
 package com.hospital;
 
 import java.sql.*;
-
+// * All doctor appoinments for admin
 public class AppointmentService {
 
     public void viewAllAppointments() throws Exception {

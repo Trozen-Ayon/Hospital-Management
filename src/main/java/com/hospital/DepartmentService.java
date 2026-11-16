@@ -2,7 +2,7 @@ package com.hospital;
 
 import java.sql.*;
 import java.util.Scanner;
-
+// * department service for admin
 public class DepartmentService {
 
     public void addDepartment(Scanner input) throws Exception {
